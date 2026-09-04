@@ -1,0 +1,131 @@
+<?php
+
+return [
+    // Navigation & Resources
+    'dashboard' => 'Dashboard',
+    'business' => 'Business',
+    'businesses' => 'Businesses',
+    'category' => 'Category',
+    'categories' => 'Categories',
+    'subcategory' => 'Subcategory',
+    'subcategories' => 'Subcategories',
+    'amenity' => 'Amenity',
+    'amenities' => 'Amenities',
+    'user' => 'User',
+    'users' => 'Users',
+    'report' => 'Report',
+    'reports' => 'Reports',
+    'business_requests' => 'Business Requests',
+
+    // Form Labels
+    'name' => 'Name',
+    'description' => 'Description',
+    'owner' => 'Owner',
+    'phone_number' => 'Phone Number',
+    'whatsapp_number' => 'WhatsApp Number',
+    'address' => 'Address',
+    'address_text' => 'Address',
+    'latitude' => 'Latitude',
+    'longitude' => 'Longitude',
+    'slug' => 'Slug',
+    'icon' => 'Icon',
+    'is_active' => 'Active',
+    'parent' => 'Parent Category',
+    'expires_at' => 'Expires At',
+    'rejection_reason' => 'Rejection Reason',
+    'average_rating' => 'Average Rating',
+    'status' => 'Status',
+    'approval_status' => 'Approval Status',
+
+    // Status Values
+    'pending' => 'Pending',
+    'approved' => 'Approved',
+    'rejected' => 'Rejected',
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+
+    // Translations Section
+    'translations' => 'Translations',
+    'name_translations' => 'Name Translations',
+    'description_translations' => 'Description Translations',
+    'language_code' => 'Language Code',
+    'translated_name' => 'Translated Name',
+    'translated_description' => 'Translated Description',
+    'add_translation' => 'Add Translation',
+
+    // Actions
+    'actions' => 'Actions',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'view' => 'View',
+    'create' => 'Create',
+    'save' => 'Save',
+    'cancel' => 'Cancel',
+    'approve' => 'Approve',
+    'reject' => 'Reject',
+    'override_expiry' => 'Override Expiry',
+
+    // Table
+    'search' => 'Search',
+    'filter' => 'Filter',
+    'export' => 'Export',
+    'import' => 'Import',
+    'created_at' => 'Created At',
+    'updated_at' => 'Updated At',
+
+    // Business Info
+    'business_information' => 'Business Information',
+    'add_business_title_desc' => 'Add business title and description',
+    'add_translations_help' => 'Add translations for business name and description in different languages',
+
+    // Business Management
+    'business_management' => 'Business Management',
+    'requested_at' => 'Requested At',
+    'request_status' => 'Request Status',
+    'approve_business_request' => 'Approve Business Request',
+    'reject_business_request' => 'Reject Business Request',
+
+    // Report Management
+    'reportable_type' => 'Reportable Type',
+    'reportable_id' => 'Reportable ID',
+    'reporter' => 'Reporter',
+    'reason' => 'Reason',
+    'content_type' => 'Content Type',
+    'content_id' => 'Content ID',
+    'reviewed' => 'Reviewed',
+    'resolved' => 'Resolved',
+    'media_post' => 'Media Post',
+    'review' => 'Review',
+    'dismiss_report' => 'Dismiss Report',
+    'remove_content' => 'Remove Content',
+    'remove_content_description' => 'The reported content will be soft-deleted where supported.',
+
+    // User Management
+    'email' => 'Email',
+    'password' => 'Password',
+    'approved_at' => 'Approved At',
+    'new_password' => 'New Password',
+    'confirm_password' => 'Confirm Password',
+    'leave_blank_to_keep' => 'Leave blank to keep the current password',
+    'change_owner_login' => 'Change Owner Login',
+    'change_owner_login_for' => 'Update login credentials for :name',
+    'owner_login_updated' => 'Owner login updated successfully',
+    'no_changes_made' => 'No changes were made',
+
+    // Media
+    'media' => 'Media',
+    'media_type' => 'Type',
+    'caption' => 'Caption',
+    'moderation_status' => 'Moderation Status',
+    'preview' => 'Preview',
+    'likes' => 'Likes',
+    'comments' => 'Comments',
+    'views' => 'Views',
+    'hidden' => 'Hidden',
+    'reel' => 'Reel',
+    'story' => 'Story',
+    'post' => 'Post',
+    'media_summary' => 'Media Summary',
+    'total_media' => 'Total Media',
+    'close' => 'Close',
+];

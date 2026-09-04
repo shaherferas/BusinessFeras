@@ -1,0 +1,1474 @@
+{
+	"info": {
+		"_postman_id": "laravel-business-api-translations",
+		"name": "Laravel Business API - Translations",
+		"description": "Complete API collection for Laravel Business Directory with multilingual support (English & Arabic)\n\n## Authentication\nMost endpoints require Bearer token authentication. Use the login endpoint to get a token.\n\n## Translation Support\n- Send `Accept-Language: en` for English\n- Send `Accept-Language: ar` for Arabic\n- Default locale is English if no header is provided\n\n## Translation Fields\nWhen creating/updating records, you can send translation fields:\n- `title` and `description_translations` for Businesses\n- `question_translations` and `answer_translations` for FAQs\n\nExample:\n```json\n{\n  \"description_translations\": {\n    \"en\": \"English description\",\n    \"ar\": \"الوصف بالعربية\"\n  }\n}\n```",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "business_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "media_post_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "conversation_id",
+			"value": "1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text",
+								"description": "Language for response messages (en or ar)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"phone_number\": \"+1234567890\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"is_business_owner\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user account. Set is_business_owner to true for business owner accounts."
+					}
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.access_token) {",
+									"        pm.collectionVariables.set('access_token', response.data.access_token);",
+									"        console.log('Access token saved:', response.data.access_token);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login and receive access token. Token is automatically saved to collection variable."
+					}
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"otp\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/auth/verify-otp",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"verify-otp"
+							]
+						}
+					}
+				},
+				{
+					"name": "Resend OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/auth/resend-otp",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"resend-otp"
+							]
+						}
+					}
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/auth/forgot-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"forgot-password"
+							]
+						}
+					}
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"token\": \"reset-token-from-email\",\n    \"password\": \"newpassword123\",\n    \"password_confirmation\": \"newpassword123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/auth/reset-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"reset-password"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/auth/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"me"
+							]
+						},
+						"description": "Get current authenticated user profile"
+					}
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"current_password\": \"password123\",\n    \"password\": \"newpassword123\",\n    \"password_confirmation\": \"newpassword123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/auth/change-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"change-password"
+							]
+						}
+					}
+				},
+				{
+					"name": "Toggle Role",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/auth/toggle-role",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"toggle-role"
+							]
+						},
+						"description": "Toggle user role between Business Owner and Customer"
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/auth/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"logout"
+							]
+						}
+					}
+				}
+			],
+			"description": "Authentication endpoints for user registration, login, and password management"
+		},
+		{
+			"name": "Business Listings (Public)",
+			"item": [
+				{
+					"name": "List Businesses (English)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text",
+								"description": "Returns data in English"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/listings?q=&category_id=1&latitude=40.7128&longitude=-74.0060&radius_km=10&sort=newest&per_page=15",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"listings"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "",
+									"description": "Search query (optional)"
+								},
+								{
+									"key": "category_id",
+									"value": "1",
+									"description": "Filter by category ID (optional)"
+								},
+								{
+									"key": "latitude",
+									"value": "40.7128",
+									"description": "User latitude for distance calculation"
+								},
+								{
+									"key": "longitude",
+									"value": "-74.0060",
+									"description": "User longitude for distance calculation"
+								},
+								{
+									"key": "radius_km",
+									"value": "10",
+									"description": "Search radius in kilometers"
+								},
+								{
+									"key": "sort",
+									"value": "newest",
+									"description": "Sort by: newest, rating, distance"
+								},
+								{
+									"key": "per_page",
+									"value": "15",
+									"description": "Items per page"
+								}
+							]
+						},
+						"description": "Get paginated list of approved businesses with English translations"
+					}
+				},
+				{
+					"name": "List Businesses (Arabic)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text",
+								"description": "Returns data in Arabic"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/listings?per_page=15",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"listings"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "",
+									"description": "Search query (optional)",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "15",
+									"description": "Items per page"
+								}
+							]
+						},
+						"description": "Get paginated list of approved businesses with Arabic translations"
+					}
+				},
+				{
+					"name": "Map Businesses (English)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/listings/map?latitude=40.7128&longitude=-74.0060&radius_km=10&category_id=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"listings",
+								"map"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "40.7128",
+									"description": "Required - Center latitude"
+								},
+								{
+									"key": "longitude",
+									"value": "-74.0060",
+									"description": "Required - Center longitude"
+								},
+								{
+									"key": "radius_km",
+									"value": "10",
+									"description": "Search radius in kilometers (default: 10)"
+								},
+								{
+									"key": "category_id",
+									"value": "1",
+									"description": "Filter by category ID (optional)"
+								}
+							]
+						},
+						"description": "Get businesses for map view within specified radius"
+					}
+				},
+				{
+					"name": "Map Businesses (Arabic)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/listings/map?latitude=40.7128&longitude=-74.0060&radius_km=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"listings",
+								"map"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "40.7128"
+								},
+								{
+									"key": "longitude",
+									"value": "-74.0060"
+								},
+								{
+									"key": "radius_km",
+									"value": "10"
+								}
+							]
+						}
+					}
+				}
+			],
+			"description": "Public endpoints for browsing business listings - no authentication required"
+		},
+		{
+			"name": "Business Management",
+			"item": [
+				{
+					"name": "Get My Businesses",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/business/businesses?per_page=15",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"businesses"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "15",
+									"description": "Items per page"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Business",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.collectionVariables.set('business_id', response.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Amazing Restaurant\",\n    \"slug\": \"amazing-restaurant\",\n    \"title\": \"Best Food in Town\",\n    \"description\": \"We serve delicious food with authentic flavors\",\n    \"description_translations\": {\n        \"en\": \"We serve delicious food with authentic flavors\",\n        \"ar\": \"نقدم طعامًا لذيذًا بنكهات أصيلة\"\n    },\n    \"phone_number\": \"+1234567890\",\n    \"whatsapp_number\": \"+1234567890\",\n    \"category_id\": 1,\n    \"subcategory_id\": 1,\n    \"latitude\": 40.7128,\n    \"longitude\": -74.0060,\n    \"address_text\": \"123 Main Street, New York, NY 10001\",\n    \"expires_at\": \"2027-12-31\",\n    \"amenity_ids\": [1, 2]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/business/businesses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"businesses"
+							]
+						},
+						"description": "Create a new business with translations. business_id is automatically saved."
+					}
+				},
+				{
+					"name": "Update Business",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Amazing Restaurant Updated\",\n    \"title\": \"The Best Restaurant in NYC\",\n    \"description\": \"Updated description\",\n    \"description_translations\": {\n        \"en\": \"Updated description in English\",\n        \"ar\": \"الوصف المحدث بالعربية\"\n    },\n    \"phone_number\": \"+1987654321\",\n    \"status\": \"active\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/business/businesses/{{business_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"businesses",
+								"{{business_id}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Business",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/business/businesses/{{business_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"businesses",
+								"{{business_id}}"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Business Listing Submission",
+			"item": [
+				{
+					"name": "Submit New Listing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.collectionVariables.set('business_id', response.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Premium Coffee Shop\",\n    \"title\": \"Artisan Coffee & Pastries\",\n    \"description\": \"Premium coffee shop serving artisan coffee and fresh pastries\",\n    \"description_translations\": {\n        \"en\": \"Premium coffee shop serving artisan coffee and fresh pastries\",\n        \"ar\": \"مقهى فاخر يقدم القهوة الحرفية والمعجنات الطازجة\"\n    },\n    \"phone_number\": \"+1555123456\",\n    \"whatsapp_number\": \"+1555123456\",\n    \"category_id\": 1,\n    \"subcategory_id\": null,\n    \"latitude\": 40.7580,\n    \"longitude\": -73.9855,\n    \"address_text\": \"456 Broadway, New York, NY 10013\",\n    \"amenity_ids\": [1, 2, 3]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/business/listings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"listings"
+							]
+						},
+						"description": "Submit a new business listing for approval. Includes translations in English and Arabic."
+					}
+				},
+				{
+					"name": "Upsert Business Hours",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"hours\": [\n        {\n            \"day_of_week\": 0,\n            \"open_time\": \"09:00\",\n            \"close_time\": \"17:00\",\n            \"is_closed\": false\n        },\n        {\n            \"day_of_week\": 1,\n            \"open_time\": \"09:00\",\n            \"close_time\": \"21:00\",\n            \"is_closed\": false\n        },\n        {\n            \"day_of_week\": 2,\n            \"open_time\": \"09:00\",\n            \"close_time\": \"21:00\",\n            \"is_closed\": false\n        },\n        {\n            \"day_of_week\": 3,\n            \"open_time\": \"09:00\",\n            \"close_time\": \"21:00\",\n            \"is_closed\": false\n        },\n        {\n            \"day_of_week\": 4,\n            \"open_time\": \"09:00\",\n            \"close_time\": \"21:00\",\n            \"is_closed\": false\n        },\n        {\n            \"day_of_week\": 5,\n            \"open_time\": \"10:00\",\n            \"close_time\": \"22:00\",\n            \"is_closed\": false\n        },\n        {\n            \"day_of_week\": 6,\n            \"open_time\": \"10:00\",\n            \"close_time\": \"22:00\",\n            \"is_closed\": false\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/business/listings/{{business_id}}/hours",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"listings",
+								"{{business_id}}",
+								"hours"
+							]
+						}
+					}
+				},
+				{
+					"name": "Upsert FAQs (With Translations)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"faqs\": [\n        {\n            \"question\": \"What are your opening hours?\",\n            \"question_translations\": {\n                \"en\": \"What are your opening hours?\",\n                \"ar\": \"ما هي ساعات العمل؟\"\n            },\n            \"answer\": \"We are open Monday to Saturday from 9 AM to 9 PM\",\n            \"answer_translations\": {\n                \"en\": \"We are open Monday to Saturday from 9 AM to 9 PM\",\n                \"ar\": \"نحن مفتوحون من الاثنين إلى السبت من 9 صباحًا إلى 9 مساءً\"\n            },\n            \"sort_order\": 0\n        },\n        {\n            \"question\": \"Do you offer delivery?\",\n            \"question_translations\": {\n                \"en\": \"Do you offer delivery?\",\n                \"ar\": \"هل تقدمون خدمة التوصيل؟\"\n            },\n            \"answer\": \"Yes, we offer delivery within a 5-mile radius\",\n            \"answer_translations\": {\n                \"en\": \"Yes, we offer delivery within a 5-mile radius\",\n                \"ar\": \"نعم، نقدم خدمة التوصيل في نطاق 5 أميال\"\n            },\n            \"sort_order\": 1\n        },\n        {\n            \"question\": \"Is parking available?\",\n            \"question_translations\": {\n                \"en\": \"Is parking available?\",\n                \"ar\": \"هل يتوفر موقف للسيارات؟\"\n            },\n            \"answer\": \"Yes, we have free parking for customers\",\n            \"answer_translations\": {\n                \"en\": \"Yes, we have free parking for customers\",\n                \"ar\": \"نعم، لدينا موقف سيارات مجاني للعملاء\"\n            },\n            \"sort_order\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/business/listings/{{business_id}}/faqs",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"listings",
+								"{{business_id}}",
+								"faqs"
+							]
+						},
+						"description": "Create or update FAQs with translations in English and Arabic"
+					}
+				},
+				{
+					"name": "Upsert Social Links",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"links\": [\n        {\n            \"platform\": \"instagram\",\n            \"url\": \"https://instagram.com/business\",\n            \"sort_order\": 0\n        },\n        {\n            \"platform\": \"facebook\",\n            \"url\": \"https://facebook.com/business\",\n            \"sort_order\": 1\n        },\n        {\n            \"platform\": \"twitter\",\n            \"url\": \"https://twitter.com/business\",\n            \"sort_order\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/business/listings/{{business_id}}/social-links",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"listings",
+								"{{business_id}}",
+								"social-links"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Media Posts",
+			"item": [
+				{
+					"name": "Get My Media Posts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/business/media?type=reel&per_page=15",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"media"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "reel",
+									"description": "Filter by type: reel, story, post"
+								},
+								{
+									"key": "per_page",
+									"value": "15",
+									"description": "Items per page"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Upload Media Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.collectionVariables.set('media_post_id', response.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "business_id",
+									"value": "{{business_id}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "reel",
+									"type": "text",
+									"description": "Type: reel, story, or post"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/path/to/your/image.jpg",
+									"description": "Image or video file (max 50MB)"
+								},
+								{
+									"key": "caption",
+									"value": "Check out our amazing products!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/business/media",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"media"
+							]
+						},
+						"description": "Upload a new media post (reel, story, or post)"
+					}
+				},
+				{
+					"name": "Delete Media Post",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/business/media/{{media_post_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"media",
+								"{{media_post_id}}"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Social Feed",
+			"item": [
+				{
+					"name": "Get Reels/Posts (Public)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/social/reels?type=reel&per_page=15",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"social",
+								"reels"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "reel",
+									"description": "Filter by type: reel, post, story"
+								},
+								{
+									"key": "per_page",
+									"value": "15",
+									"description": "Items per page"
+								}
+							]
+						},
+						"description": "Get public social feed (reels, posts, stories)"
+					}
+				},
+				{
+					"name": "Toggle Like",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/social/{{media_post_id}}/like",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"social",
+								"{{media_post_id}}",
+								"like"
+							]
+						},
+						"description": "Like or unlike a media post (toggle behavior)"
+					}
+				},
+				{
+					"name": "Add Comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\": \"Great post! Love it!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/social/{{media_post_id}}/comments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"social",
+								"{{media_post_id}}",
+								"comments"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Submit Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 5,\n    \"comment\": \"Excellent service! Highly recommended.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/listings/{{business_id}}/reviews",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"listings",
+								"{{business_id}}",
+								"reviews"
+							]
+						},
+						"description": "Submit or update a review for a business (one review per user per business)"
+					}
+				}
+			]
+		},
+		{
+			"name": "Chats",
+			"item": [
+				{
+					"name": "Get My Conversations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/chats?per_page=20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"chats"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"description": "Items per page"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Conversation Messages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/chats/{{conversation_id}}?per_page=30",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"chats",
+								"{{conversation_id}}"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "30",
+									"description": "Messages per page"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Analytics & Dashboard",
+			"item": [
+				{
+					"name": "Get Dashboard Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/business/dashboard",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"dashboard"
+							]
+						},
+						"description": "Get dashboard statistics for business owner"
+					}
+				},
+				{
+					"name": "Get Analytics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/business/analytics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"business",
+								"analytics"
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}

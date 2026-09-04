@@ -1,0 +1,4 @@
+<?php
+namespace App\Filament\Widgets;
+use App\Models\Business; use App\Models\User; use Filament\Widgets\ChartWidget;
+class BusinessGrowthChart extends ChartWidget { protected static ?string $heading = null; public function getHeading(): ?string { return __('filament.widgets.growth_30_days'); } protected function getData(): array { $dates=collect(range(29,0))->map(fn($d)=>now()->subDays($d)->toDateString()); return ['datasets'=>[['label'=>__('filament.widgets.user_registrations'),'data'=>$dates->map(fn($date)=>User::whereDate('created_at',$date)->count())],['label'=>__('filament.widgets.business_signups'),'data'=>$dates->map(fn($date)=>Business::whereDate('created_at',$date)->count())]],'labels'=>$dates->map(fn($date)=>substr($date,5))->all()]; } protected function getType(): string { return 'line'; } }
